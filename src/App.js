@@ -11,43 +11,50 @@ function App() {
       params: {
         lat: lat,
         lon: long,
-        appid: process.env.REACT_APP_OPEN_WHEATHER_KEY,
+        appid:"dc6f308012f7c0b108e6c9029f4ad8fe",
         lang: 'pt',
         units: 'metric'
       }
     });
     setWeather(res.data);
+    console.log(res.data)
   }
 
   useEffect(()=> {
     navigator.geolocation.getCurrentPosition((position)=> {
-      console.log(position.coords.latitude, position.coords.longitude);
+      getWeather(position.coords.latitude, position.coords.longitude);
       setLocation(true)
     })
   }, [])
 
-  if(location == false){
+  if (location == false) {
     return (
       <Fragment>
         Você precisa habilitar a localização no browser o/
       </Fragment>
     )
-} else{
-
+  } else if (weather == false) {
     return (
       <Fragment>
-        <h3>Clima nas suas Coordenadas (Exemplo)</h3>
-        <hr />
+        Carregando o clima...
+      </Fragment>
+    )
+  } else {
+    return (
+      <Fragment>
+        <h3>Clima nas suas Coordenadas ({weather['weather'][0]['description']})</h3>
+        <hr/>
         <ul>
-          <li>Temperatura atual: x°</li>
-          <li>Temperatura máxima: x°</li>
-          <li>Temperatura minima: x°</li>
-          <li>Pressão: x hpa</li>
-          <li>Umidade: x%</li>
+          <li>Temperatura atual: {weather['main']['temp']}°</li>
+          <li>Temperatura máxima: {weather['main']['temp_max']}°</li>
+          <li>Temperatura minima: {weather['main']['temp_min']}°</li>
+          <li>Pressão: {weather['main']['pressure']} hpa</li>
+          <li>Humidade: {weather['main']['humidity']}%</li>
         </ul>
       </Fragment>
     );
-}
+  }
+  
 
   return (
     <Fragment>
